@@ -122,25 +122,13 @@ p  { margin: 0 0 1rem; color: var(--ink-2); }
 }
 .btn-block { width: 100%; }
 
-/* --- Brand mark (three rings) --- */
-.brand-mark {
-  position: relative;
-  width: 52px;
-  height: 36px;
-  display: inline-block;
+/* --- Brand mark (CHC monogram image) --- */
+.brand-mark-img {
+  width: auto;
+  height: 44px;
+  display: block;
   flex-shrink: 0;
 }
-.brand-mark .ring {
-  position: absolute;
-  top: 3px;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: 2.2px solid var(--teal-800);
-}
-.brand-mark .ring-1 { left: 0; }
-.brand-mark .ring-2 { left: 11px; border-color: var(--teal-600); }
-.brand-mark .ring-3 { left: 22px; border-color: var(--accent-600); }
 
 /* --- Header / Nav --- */
 .site-header {
@@ -177,10 +165,15 @@ p  { margin: 0 0 1rem; color: var(--ink-2); }
   letter-spacing: .01em;
 }
 .brand-sub {
-  font-size: .72rem;
+  font-size: .7rem;
   letter-spacing: .18em;
   text-transform: uppercase;
   color: var(--teal-600);
+  margin-top: 2px;
+}
+@media (max-width: 520px) {
+  .brand-text { display: none; }
+  .brand-mark-img { height: 40px; }
 }
 .primary-nav { display: flex; align-items: center; }
 .nav-links {
@@ -684,22 +677,25 @@ p  { margin: 0 0 1rem; color: var(--ink-2); }
 }
 .footer-brand {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 14px;
 }
-.footer-brand .brand-mark .ring { border-color: #fff; }
-.footer-brand .brand-mark .ring-3 { border-color: var(--accent-500); }
-.footer-name {
-  font-family: var(--font-serif);
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: #fff;
-  margin: 0;
+.footer-logo {
+  width: auto;
+  max-width: 320px;
+  height: auto;
+  background: #fff;
+  padding: 16px 22px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
 }
 .footer-tag {
-  color: rgba(255,255,255,.65);
-  font-size: .9rem;
-  margin: .15rem 0 0;
+  color: rgba(255,255,255,.75);
+  font-size: .95rem;
+  margin: 0;
+  font-family: var(--font-script);
+  font-size: 1.1rem;
 }
 .footer-cols {
   display: grid;

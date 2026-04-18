@@ -5,3 +5,7 @@ node_modules/
 .env.local
 .vercel
 *.log
+
+# Intermediate / raw logo exports (not used by the site)
+assets/logo-raw-*.png
+assets/logo200-*.png
