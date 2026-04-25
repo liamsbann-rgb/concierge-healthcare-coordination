@@ -1,7 +1,23 @@
-// Concierge Healthcare Coordination — minimal interactivity
+// Concierge Healthcare Coordination
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// Set current year in footer
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
 document.addEventListener('DOMContentLoaded', () => {
+
+  // Set current year in footer
   const yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
@@ -13,7 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const open = links.classList.toggle('open');
       toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
     });
-    // Close menu when a link is tapped
     links.addEventListener('click', (e) => {
       if (e.target.tagName === 'A') {
         links.classList.remove('open');
@@ -22,52 +37,44 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Booking form — builds a mailto draft so it works on a static host
-  // (no backend required for Vercel static deployment)
+  // Booking form — saves to Firebase Firestore
   const form = document.getElementById('bookingForm');
   const note = document.getElementById('formNote');
-
   if (form) {
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
       note.className = 'form-note';
       note.textContent = '';
 
       const data = Object.fromEntries(new FormData(form).entries());
 
-      // Basic validation
       if (!data.name || !data.email || !data.consent) {
         note.textContent = 'Please fill out your name, email, and consent to being contacted.';
         note.classList.add('error');
         return;
       }
 
-      const subject = encodeURIComponent(
-        `Consultation Request — ${data.name}`
-      );
-      const bodyLines = [
-        `Name: ${data.name}`,
-        `Email: ${data.email}`,
-        `Phone: ${data.phone || '—'}`,
-        `Service of Interest: ${data.service || '—'}`,
-        '',
-        'Message:',
-        data.message || '(no message provided)',
-      ];
-      const body = encodeURIComponent(bodyLines.join('\n'));
-
-      // Open the user's default mail client pre-filled
-      const mailto = `mailto:info@conciergecareconsultants.org?subject=${subject}&body=${body}`;
-      window.location.href = mailto;
-
-      note.textContent =
-        'Thanks! Your email client should open with a pre-filled message. If it doesn\'t, please email info@conciergecareconsultants.org directly.';
-      note.classList.add('success');
-      form.reset();
+      try {
+        await addDoc(collection(db, "consultations"), {
+          name: data.name,
+          email: data.email,
+          phone: data.phone || '',
+          service: data.service || '',
+          message: data.message || '',
+          timestamp: serverTimestamp()
+        });
+        note.textContent = 'Thank you! We\'ll be in touch shortly to schedule your consultation.';
+        note.classList.add('success');
+        form.reset();
+      } catch (err) {
+        console.error('Firestore error:', err);
+        note.textContent = 'Something went wrong. Please email info@conciergecareconsultants.org directly.';
+        note.classList.add('error');
+      }
     });
   }
 
-  // Smooth-scroll offset for sticky header when jumping via anchors
+  // Smooth-scroll offset for sticky header
   const header = document.querySelector('.site-header');
   if (header) {
     document.querySelectorAll('a[href^="#"]').forEach((a) => {
@@ -82,4 +89,5 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
+
 });
