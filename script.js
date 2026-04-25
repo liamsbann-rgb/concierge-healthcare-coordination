@@ -4,12 +4,13 @@ import { getFirestore, collection, addDoc, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyCjn3pIxfeUxmoR9vZHVck35WCpI1Ui-TI",
+  authDomain: "chcdata-14b7a.firebaseapp.com",
+  projectId: "chcdata-14b7a",
+  storageBucket: "chcdata-14b7a.firebasestorage.app",
+  messagingSenderId: "315864416306",
+  appId: "1:315864416306:web:f821e8b3581707a15d7c2b",
+  measurementId: "G-R39NVE8TK7"
 };
 
 const app = initializeApp(firebaseConfig);
